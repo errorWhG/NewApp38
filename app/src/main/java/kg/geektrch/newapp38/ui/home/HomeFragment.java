@@ -18,10 +18,30 @@ import androidx.navigation.Navigation;
 
 import kg.geektrch.newapp38.R;
 import kg.geektrch.newapp38.databinding.FragmentHomeBinding;
+import kg.geektrch.newapp38.models.NewsModel;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private NewsAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new NewsAdapter();
+        adapter.setOnClick(new NewsAdapter.OnClick() {
+            @Override
+            public void onLongClick(int newsModel) {
+                adapter.removeItem(newsModel);
+            }
+
+            @Override
+            public void onClick(int newsModel) {
+                NewsModel newsModel1 = adapter.getItem(newsModel);
+                openFragment(newsModel1);
+            }
+        });
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,21 +56,28 @@ public class HomeFragment extends Fragment {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFragment();
+                openFragment(null);
             }
         });
         getParentFragmentManager().setFragmentResultListener("rk_news", getViewLifecycleOwner(), new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                String text = result.getString("text");
-                Log.e("Home", "text = " + text);
+                NewsModel model = (NewsModel) result.getSerializable("text");
+                adapter.addItem(model);
             }
         });
+        init();
     }
 
-    private void openFragment() {
+    private void init() {
+        binding.recyclerView.setAdapter(adapter);
+    }
+
+    private void openFragment(NewsModel newsModel) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("day", newsModel);
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        navController.navigate(R.id.newsFragment);
+        navController.navigate(R.id.newsFragment,bundle);
     }
 
     @Override
