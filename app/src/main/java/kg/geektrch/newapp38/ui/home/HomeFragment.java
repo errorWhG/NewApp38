@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putSerializable("day", newsModel);
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        navController.navigate(R.id.newsFragment,bundle);
+        navController.navigate(R.id.newsFragment, bundle);
     }
 
     @Override

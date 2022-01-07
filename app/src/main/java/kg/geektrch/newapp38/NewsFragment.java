@@ -16,7 +16,6 @@ import kg.geektrch.newapp38.databinding.FragmentHomeBinding;
 import kg.geektrch.newapp38.databinding.FragmentNewsBinding;
 import kg.geektrch.newapp38.models.NewsModel;
 
-
 public class NewsFragment extends Fragment {
 
     private FragmentNewsBinding binding;
